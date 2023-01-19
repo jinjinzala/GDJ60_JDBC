@@ -10,5 +10,10 @@
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
+
+<a href = "./departments">departments list</a>
+<a href = "./Locations">locations list</a>
+
+
 </body>
 </html>
