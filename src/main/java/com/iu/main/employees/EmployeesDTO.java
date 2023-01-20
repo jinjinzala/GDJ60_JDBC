@@ -20,14 +20,13 @@ public class EmployeesDTO {
 	private String last_name;
 	private String email;
 	private String phone_number;
-	private Date hire_date;
+	private String hire_date;
 	private String salary;
 	//commission_pct는 double로 선언하는게 좋다.
 	private Integer commission_pct;
 	private Integer manager_id;
 	private Integer department_id;
 	private String job_id;
-	
 	
 	
 	public Integer getEmployee_id() {
@@ -60,10 +59,10 @@ public class EmployeesDTO {
 	public void setPhone_number(String phone_number) {
 		this.phone_number = phone_number;
 	}
-	public Date getHire_date() {
+	public String getHire_date() {
 		return hire_date;
 	}
-	public void setHire_date(Date hire_date) {
+	public void setHire_date(String hire_date) {
 		this.hire_date = hire_date;
 	}
 	public String getSalary() {
@@ -96,5 +95,8 @@ public class EmployeesDTO {
 	public void setJob_id(String job_id) {
 		this.job_id = job_id;
 	}
-	
 }
+	
+	
+	
+	

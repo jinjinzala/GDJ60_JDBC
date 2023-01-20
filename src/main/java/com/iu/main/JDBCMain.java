@@ -20,9 +20,12 @@ public class JDBCMain {
 		DepartmentDAO departmentDAO = new DepartmentDAO();
 		LocationDAO locationDAO = new LocationDAO();
 		LocationController lc = new LocationController();
+		FrontController fc = new FrontController();
+		
 		try {
 			//ic.start();
 			//dc.start();
+			fc.start();
 		//	dao.getAvg();
 			LocationDTO locationDTO =new LocationDTO();
 //			locationDAO.setData(locationDTO);

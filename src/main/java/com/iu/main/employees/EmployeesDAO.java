@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.iu.main.departments.DepartmentDTO;
 import com.iu.main.util.DBConnection;
@@ -14,21 +15,32 @@ public class EmployeesDAO {
 	
 	
    //월급의 평균
-	public void getAvg() throws Exception{
+	public HashMap<String, Double> getAvg() throws Exception{
+		HashMap<String, Double> map = new HashMap<String, Double>();
+		
+
 		Connection con = DBConnection.getConnection();
 		
-		String sql = "SELECT AVG(SALARY), SUM(SALARY) FROM EMPLOYEES";
+		String sql = "SELECT AVG(SALARY)*12+100 AS A, SUM(SALARY) FROM EMPLOYEES";
+		
 		PreparedStatement st = con.prepareStatement(sql);
 		
 		ResultSet rs = st.executeQuery();
 	    
 		rs.next();
 		
-		System.out.println(rs.getDouble(1));
-		System.out.println(rs.getInt(2));
+
+		//1. List,Array<Double>
+		//2. DTO(Class)
+		//3. Map(key,value)
+		
+		map.put("avg",rs.getDouble("A") );
+		map.put("sum",rs.getDouble(2));
 		
 		DBConnection.disConnect(rs, st, con);
-		
+		return map;
+	
+	
 	}
 
 	public EmployeesDTO getDetail(int employees_id) throws Exception{
@@ -42,6 +54,7 @@ public class EmployeesDAO {
 	//인덱스 번호는 선언한 순서대로 1,2,3,4---9
 	String sql = "SELECT EMPLOYEE_ID,FIRST_NAME,LAST_NAME,JOB_ID"
 			     + "FROM EMPLOYEES WHERE EMPLOYEE_ID =? ORDER BY HIRE_DATE DESC";
+	
 	//PreparedStatement는 해킹을 막기위해 메서드와 ?를 이용하여 사용하는 클래스
 	//미리 전송  
 	PreparedStatement st = connection.prepareStatement(sql);
@@ -111,6 +124,7 @@ public class EmployeesDAO {
 		employeesDTO.setFirst_name(rs.getString("FIRST_NAME"));
 		employeesDTO.setLast_name(rs.getString("LAST_NAME"));
 		employeesDTO.setJob_id(rs.getString("JOB_ID"));
+		employeesDTO.setHire_date(rs.getString("HIRE_DATE"));
 		ar.add(employeesDTO);
 	    }
 		DBConnection.disConnect(rs, st, connection);

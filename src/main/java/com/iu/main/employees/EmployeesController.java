@@ -20,7 +20,8 @@ public class EmployeesController {
 			System.out.println("1.사원 전체 리스트");
 			System.out.println("2.사원 번호로 검색 ");
 			System.out.println("3.이름으로 검색");
-			System.out.println("4.종      료");
+            System.out.println("4.날짜를 변경");
+			System.out.println("5.종      료");
 		//입력한 번호의 값을 받아오는 함수 	
 			int select = sc.nextInt();
 			switch(select){
@@ -48,6 +49,15 @@ public class EmployeesController {
 //					employeesView.view("data가 없습니다.");
 //				}
 //				break;
+			case 4: System.out.println("검색할 이름을 입력해주세요");
+		    select = sc.nextInt();
+		    employeesDTO = employeesDAO.getname(select);
+		    if(employeesDTO != null) {
+				employeesView.view(employeesDTO);
+			}else {
+				employeesView.view("data가 없습니다.");
+			}
+			break;
 			default:
 				check=false;
 		
