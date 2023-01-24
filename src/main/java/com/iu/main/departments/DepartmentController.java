@@ -47,7 +47,7 @@ public class DepartmentController {
 				}
 				break;
 			case 3: 
-				departmentDTO  = departmentInput.setData();
+				departmentDTO  = departmentInput.setDate();
 				select = departmentDAO.setData(departmentDTO);
 				
 				if(select>0) {
@@ -57,7 +57,7 @@ public class DepartmentController {
 				}
 				break;
 			case 4:
-				departmentDTO = departmentInput.deleteData();
+				departmentDTO = departmentInput.deleteDate();
 				select = departmentDAO.deleteData(departmentDTO);
 				String msg = "삭제실패";
 				if(select>0) {
@@ -67,7 +67,7 @@ public class DepartmentController {
 				break;
 				
 			case 5:	
-				departmentDTO = departmentInput.updateData();
+				departmentDTO = departmentInput.updateDate();
 				select = departmentDAO.updateData(departmentDTO);
 				if(select>0) {
 					departmentView.view("수정 성공");
