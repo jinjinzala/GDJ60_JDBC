@@ -11,7 +11,7 @@ import com.iu.main.locations.LocationDTO;
 import com.iu.main.util.DBConnection;
 
 public class JDBCMain {
-
+//희진테스트 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		System.out.println("start");
