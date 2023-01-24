@@ -1,3 +1,5 @@
+
+
 package com.iu.main.employees;
 
 import java.util.ArrayList;
@@ -11,10 +13,13 @@ public class EmployeesController {
 	private Scanner sc;
 	private EmployeesDAO employeesDAO;
 	private EmployeesView employeesView;
+	private EmployeesInput employeesInput;
+	
 	public EmployeesController() {
 		this.sc = new Scanner(System.in);
 	    this.employeesDAO = new EmployeesDAO();
 	    this.employeesView = new EmployeesView();
+	    this.employeesInput = new EmployeesInput();
 	}
 	public void start() throws Exception{
 		boolean check = true;
@@ -45,30 +50,30 @@ public class EmployeesController {
 				employeesView.view("data가 없습니다.");
 			}
 			break;
-//		case 3:
-//			System.out.print("검색할 사원 이름 입력:");
-//			String add = sc.next();
-//			ar = employeesDAO.getFind(add);
-//			employeesView.view(ar);
-//			break;
-//		case 4:
-//			employeesDTO = employeeInput.setData();
-//			select = employeesDAO.setData(employeesDTO);
-//			if(select > 0) {
-//				employeesView.view("추가에 성공하였습니다");
-//			}else {
-//				employeesView.view("추가에 실패하였습니다");
-//			}
-//			break;
-//		case 5:
-//			employeesDTO = employeeInput.deleteData();
-//			select = employeesDAO.deleteData(employeesDTO);
-//			if(select > 0) {
-//				employeesView.view("사원 삭제를 성공하였습니다");
-//			}else {
-//				employeesView.view("사원 삭제를 실패하였습니다");
-//			}
-//			break;
+		case 3:
+			System.out.print("검색할 사원 이름 입력:");
+			String add = sc.next();
+			ar = employeesDAO.getFind(add);
+			employeesView.view(ar);
+			break;
+		case 4:
+			employeesDTO = employeesInput.setData();
+			select = employeesDAO.setData(employeesDTO);
+			if(select > 0) {
+				employeesView.view("추가에 성공하였습니다");
+			}else {
+				employeesView.view("추가에 실패하였습니다");
+			}
+			break;
+		case 5:
+			employeesDTO = employeesInput.deleteData();
+			select = employeesDAO.deleteData(employeesDTO);
+			if(select > 0) {
+				employeesView.view("사원 삭제를 성공하였습니다");
+			}else {
+				employeesView.view("사원 삭제를 실패하였습니다");
+			}
+			break;
 //		case 6:
 //			employeesDTO = employeeInput.updateData();
 //			select = employeesDAO.updateData(employeesDTO);
@@ -90,4 +95,3 @@ public class EmployeesController {
 	
 }
 }
-
