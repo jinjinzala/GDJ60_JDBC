@@ -31,6 +31,67 @@ public class EmployeesDAO {
 		return map;
 	}
 
+//5번 삭제데이터 
+	public int deleteData(EmployeesDTO employeesDTO) throws Exception{
+		Connection connection = DBConnection.getConnection();
+		String sql = "DELETE EMPLOYEES WHERE EMPLOYEE_ID=?";
+		PreparedStatement st = connection.prepareStatement(sql);
+		st.setInt(1, employeesDTO.getEmployee_id());
+		int result = st.executeUpdate();
+		return result;
+	}
+	
+//4번 setData	
+public int setData(EmployeesDTO employeesDTO) throws Exception{
+		Connection connection = DBConnection.getConnection();
+		String sql = "INSERT INTO EMPLOYEES (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER,"
+				+ "HIRE_DATE,JOB_ID,SALARY,COMMISSION_PCT,MANAGER_ID,DEPARTMENT_ID)"
+				+ " VALUES (EMPLOYEES_SEQ.NEXTVAL,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement st = connection.prepareStatement(sql);
+		st.setString(1, employeesDTO.getFirst_name());
+		st.setString(2, employeesDTO.getLast_name());
+		st.setString(3, employeesDTO.getEamil());
+		st.setString(4, employeesDTO.getPhone_number());
+		st.setString(5, employeesDTO.getHire_date());
+		st.setString(6, employeesDTO.getJob_id());
+		st.setDouble(7, employeesDTO.getSalary());
+		st.setDouble(8, employeesDTO.getCommision_pct());
+		st.setInt(9, employeesDTO.getManager_id());
+		st.setInt(10, employeesDTO.getDepartment_id());
+		int result = st.executeUpdate();
+		DBConnection.disConnect(st, connection);
+		return result;
+	}
+//3번 사원 검색하기 getFind
+	public ArrayList<EmployeesDTO> getFind(String search) throws Exception {
+		ArrayList<EmployeesDTO> ar = new ArrayList<EmployeesDTO>();
+		Connection connection = DBConnection.getConnection();
+		String sql = "SELECT * FROM EMPLOYEES WHERE LAST_NAME LIKE ?";
+		PreparedStatement st = connection.prepareStatement(sql);
+
+		//'%a%'는 %가 꼭 들어가야 됨
+		st.setString(1, "%"+search+"%");
+		
+		ResultSet rs = st.executeQuery();
+		
+		while(rs.next()) {
+			EmployeesDTO employeesDTO = new EmployeesDTO();
+			employeesDTO.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
+			employeesDTO.setFirst_name(rs.getString("FIRST_NAME"));
+			employeesDTO.setLast_name(rs.getString("LAST_NAME"));
+			employeesDTO.setEamil(rs.getString("EMAIL"));
+			employeesDTO.setPhone_number(rs.getString("PHONE_NUMBER"));
+			employeesDTO.setHire_date(rs.getString("HIRE_DATE"));
+			employeesDTO.setJob_id(rs.getString("JOB_ID"));  
+			employeesDTO.setSalary(rs.getDouble("SALARY"));
+			employeesDTO.setCommision_pct(rs.getDouble("COMMISSION_PCT"));
+			employeesDTO.setManager_id(rs.getInt("MANAGER_ID"));
+			employeesDTO.setDepartment_id(rs.getInt("DEPARTMENT_ID"));
+			ar.add(employeesDTO);
+		}
+		DBConnection.disConnect(rs, st, connection);		
+		return ar;
+	}	
 	
 //2번 개별 사원리스트 출력 	getDetail
 	public EmployeesDTO getDetail(int employee_id) throws Exception{
@@ -150,6 +211,3 @@ public class EmployeesDAO {
 	
 	
 	
-
-
-
