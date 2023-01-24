@@ -32,28 +32,23 @@ public class EmployeesDAO {
 	}
 
 	
-	
-	
-	
-	
-	
-	
 //2번 개별 사원리스트 출력 	getDetail
-	public EmployeesDTO getDetail(int employees_id) throws Exception{
-	EmployeesDTO employeesDTO = new EmployeesDTO();	
+	public EmployeesDTO getDetail(int employee_id) throws Exception{
+	EmployeesDTO employeesDTO = null;
 	//DB연결 
 	Connection connection = DBConnection.getConnection();
 	
 	//쿼리문 생성 이걸 불러와줬으면 해 
 	//쿼리문 쓸때 꼭 띄어쓰기하고 엔터쳐야지 문장이 잘 연결된다 
 	//인덱스 번호는 선언한 순서대로 1,2,3,4---9
-	String sql = "SELECT EMPLOYEE_ID,FIRST_NAME,LAST_NAME,JOB_ID"
-			     + "FROM EMPLOYEES WHERE EMPLOYEE_ID =? ORDER BY HIRE_DATE DESC";
+	String sql =  "SELECT EMPLOYEE_ID, FIRST_NAME ,LAST_NAME, EMAIL ,PHONE_NUMBER,"
+			+ "HIRE_DATE,JOB_ID,SALARY,COMMISSION_PCT,MANAGER_ID,DEPARTMENT_ID"
+			+ " FROM EMPLOYEES WHERE EMPLOYEE_ID=?";
 	
 	//PreparedStatement는 해킹을 막기위해 메서드와 ?를 이용하여 사용하는 클래스
 	//미리 전송  
 	PreparedStatement st = connection.prepareStatement(sql);
-	st.setInt(1,employees_id); 
+	st.setInt(1,employee_id); 
 	//executeQuery()메소드는 수행결과로 ResultSet 객체의 값을 반환한다.
 	ResultSet rs = st.executeQuery();
 	
@@ -61,10 +56,17 @@ public class EmployeesDAO {
 	//rs.next : rs 객체를 리턴해줘 
 	if(rs.next()) {
 	employeesDTO = new EmployeesDTO();
-    employeesDTO.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
-    employeesDTO.setFirst_name(rs.getString("FIRST_NAME"));
-    employeesDTO.setLast_name(rs.getString("LAST_NAME"));
-    employeesDTO.setJob_id(rs.getString("JOB_ID"));
+	employeesDTO.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
+	employeesDTO.setFirst_name(rs.getString("FIRST_NAME"));
+	employeesDTO.setLast_name(rs.getString("LAST_NAME"));
+	employeesDTO.setEamil(rs.getString("EMAIL"));
+	employeesDTO.setPhone_number(rs.getString("PHONE_NUMBER"));
+	employeesDTO.setHire_date(rs.getString("HIRE_DATE"));
+	employeesDTO.setJob_id(rs.getString("JOB_ID"));
+	employeesDTO.setSalary(rs.getDouble("SALARY"));
+	employeesDTO.setManager_id(rs.getInt("MANAGER_ID"));
+	employeesDTO.setDepartment_id(rs.getInt("DEPARTMENT_ID"));
+	employeesDTO.setCommision_pct(rs.getDouble("COMMISSION_PCT"));
      
 	}
 	DBConnection.disConnect(rs, st, connection);
@@ -91,10 +93,17 @@ public class EmployeesDAO {
 	   while(rs.next()) {
 		   //객체 만들기 
 		   EmployeesDTO employeesDTO = new EmployeesDTO();
-		   employeesDTO.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
-		   employeesDTO.setFirst_name(rs.getString("FIRST_NAME"));
-		   employeesDTO.setLast_name(rs.getString("LAST_NAME"));
-		   employeesDTO.setJob_id(rs.getString("JOB_ID"));
+			employeesDTO.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
+			employeesDTO.setFirst_name(rs.getString("FIRST_NAME"));
+			employeesDTO.setLast_name(rs.getString("LAST_NAME"));
+			employeesDTO.setEamil(rs.getString("EMAIL"));
+			employeesDTO.setPhone_number(rs.getString("PHONE_NUMBER"));
+			employeesDTO.setHire_date(rs.getString("HIRE_DATE"));
+			employeesDTO.setJob_id(rs.getString("JOB_ID"));
+			employeesDTO.setCommision_pct(rs.getDouble("COMMISSION_PCT"));
+			employeesDTO.setManager_id(rs.getInt("MANAGER_ID"));
+			employeesDTO.setDepartment_id(rs.getInt("DEPARTMENT_ID"));
+			employeesDTO.setSalary(rs.getDouble("SALARY"));
 		   ar.add(employeesDTO);
 	   }
 	   DBConnection.disConnect(rs, st, connection);
@@ -125,6 +134,10 @@ public class EmployeesDAO {
 		employeesDTO.setPhone_number(rs.getString("PHONE_NUMBER"));
 		employeesDTO.setHire_date(rs.getString("HIRE_DATE"));
 		employeesDTO.setJob_id(rs.getString("JOB_ID"));
+		employeesDTO.setCommision_pct(rs.getDouble("COMMISSION_PCT"));
+		employeesDTO.setManager_id(rs.getInt("MANAGER_ID"));
+		employeesDTO.setDepartment_id(rs.getInt("DEPARTMENT_ID"));
+		employeesDTO.setSalary(rs.getDouble("SALARY"));
 		ar.add(employeesDTO);
 	    }
 		DBConnection.disConnect(rs, st, connection);
@@ -137,5 +150,6 @@ public class EmployeesDAO {
 	
 	
 	
+
 
 
