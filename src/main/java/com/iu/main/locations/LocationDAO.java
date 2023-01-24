@@ -6,65 +6,63 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import com.iu.main.departments.DepartmentDTO;
 import com.iu.main.util.DBConnection;
 
 public class LocationDAO {
-
-	//update
-	public int updateData(LocationDTO locationDTO)throws Exception{
-		Connection connection = DBConnection.getConnection();
-		
-		String sql = "UPDATE LOCATIONS SET POSTAL_CODE = ? ,CITY = ?, STATE_PROVINCE =?"
-				+ "WHERE LOCATION_ID = ?";
-				
-		PreparedStatement st = connection.prepareStatement(sql);	
-		st.setString(1,locationDTO.getPostal_code());
-		st.setString(2,locationDTO.getCity());
-		st.setString(3,locationDTO.getState_province());
-		st.setInt(4,locationDTO.getLocation_id());
 	
-        int result = st.executeUpdate();
-        DBConnection.disConnect(st, connection);
-        return result;
-		
-	}
-	//insert 규칙 
-	public int setData(LocationDTO locationDTO) throws Exception{
-		
+	public int updateDate(LocationDTO locationDTO) throws Exception{
 		Connection connection = DBConnection.getConnection();
-			
-		String sql = "INSERT INTO LOCATIONS (LOCATION_ID,STRRET_ADDRESS,POSTAL_CODE,CITY,STATE_PROVINCE,COUNTRY_ID)"
-				 + "VALUES(LOCATIONS_SEQ.NEXTVAL,?,?,?,?,?,?)";
-		
+		String sql = "UPDATE LOCATIONS SET STREET_ADDRESS=?, POSTAL_CODE=?,CITY=?"
+				+ " WHERE LOCATION_ID=?";
 		PreparedStatement st = connection.prepareStatement(sql);
-		st.setInt(1,locationDTO.getLocation_id());
-		st.setString(2,locationDTO.getStreet_address());
-		st.setString(3, locationDTO.getPostal_code());
-		st.setString(4, locationDTO.getCity());
-		st.setString(5, locationDTO.getState_province());
-		st.setString(6, locationDTO.getCountry_id());
-	
+		st.setString(1, locationDTO.getStreet_address());
+		st.setString(2, locationDTO.getPostal_code());
+		st.setString(3, locationDTO.getCity());
+		st.setInt(4, locationDTO.getLocation_id());
 		int result = st.executeUpdate();
-	    DBConnection.disConnect(st, connection);
+		DBConnection.disConnect(st, connection);
 		return result;
-	
 	}
-
 	
-	public ArrayList<LocationDTO> getFind(String search)throws Exception{
+	public int deleteData(LocationDTO locationDTO) throws Exception{
+		Connection connection = DBConnection.getConnection();
+		String sql = "DELETE LOCATIONS WHERE LOCATION_ID=?";
+		PreparedStatement st = connection.prepareStatement(sql);
+		st.setInt(1, locationDTO.getLocation_id());
+		int result = st.executeUpdate();
+		DBConnection.disConnect(st, connection);
+		return result;
+	}
+	
+	//insert
+	public int setData(LocationDTO locationDTO) throws Exception {
+		Connection connection = DBConnection.getConnection();
+		String sql = "INSERT INTO LOCATIONS (LOCATION_ID,STREET_ADDRESS,POSTAL_CODE,CITY,STATE_PROVINCE,COUNTRY_ID)"
+				+ " VALUES(LOCATIONS_SEQ.NEXTVAL,?,?,?,?,?)";
+		PreparedStatement st = connection.prepareStatement(sql);
+		st.setString(1,locationDTO.getStreet_address());
+		st.setString(2,locationDTO.getPostal_code());
+		st.setString(3,locationDTO.getCity());
+		st.setString(4,locationDTO.getState_province());
+		st.setString(5,locationDTO.getCountry_id());
+		int result = st.executeUpdate();
+		DBConnection.disConnect(st, connection);
+		return result;
+	}
+	
+	
+	
+	public ArrayList<LocationDTO> getFind(String search) throws Exception {
 		ArrayList<LocationDTO> ar = new ArrayList<LocationDTO>();
-		
 		Connection connection = DBConnection.getConnection();
 		
 		String sql = "SELECT * FROM LOCATIONS WHERE STREET_ADDRESS LIKE ?";
 		
 		PreparedStatement st = connection.prepareStatement(sql);
-		
-		st.setString(1, "%"+search+"%");
-		
+		//'%a%'는 %가 꼭 들어가야 됨
+		st.setString(1,"%"+search+"%");
+		//ResultSet에서 String은 자동으로 '' 넣어줌
 		ResultSet rs = st.executeQuery();
-		
 		while(rs.next()) {
 			LocationDTO locationDTO = new LocationDTO();
 			locationDTO.setLocation_id(rs.getInt("LOCATION_ID"));
@@ -73,56 +71,47 @@ public class LocationDAO {
 			locationDTO.setCity(rs.getString("CITY"));
 			locationDTO.setState_province(rs.getString("STATE_PROVINCE"));
 			locationDTO.setCountry_id(rs.getString("COUNTRY_ID"));
-			ar.add(locationDTO);	
+			ar.add(locationDTO);
 		}
-		
 		DBConnection.disConnect(rs, st, connection);
-		
 		return ar;
-		
 	}
 	
-	public void getDetail(int location_id) throws Exception {
+	public LocationDTO getDetail(int location_id) throws Exception{
+		LocationDTO locationDTO = null;
 		Connection connection = DBConnection.getConnection();
-		
-		String sql="SELECT * FROM LOCATIONS WHERE LOCATION_ID=?";
+		String sql = "SELECT * FROM LOCATIONS WHERE LOCATION_ID=?";
 		PreparedStatement st = connection.prepareStatement(sql);
-		
 		st.setInt(1, location_id);
-		
 		ResultSet rs = st.executeQuery();
-		//
+		
 		if(rs.next()) {
-			System.out.println(rs.getInt("LOCATION_ID"));
-			System.out.println(rs.getString("STREET_ADDRESS"));
-			System.out.println(rs.getString("POSTAL_CODE"));
-			System.out.println(rs.getString("CITY"));
-			System.out.println(rs.getString("STATE_PROVINCE"));
-			System.out.println(rs.getString("COUNTRY_ID"));
-		}else {
-			System.out.println("Data가 없다");
+			locationDTO = new LocationDTO();
+			locationDTO.setLocation_id(rs.getInt("LOCATION_ID"));
+			locationDTO.setStreet_address(rs.getString("STREET_ADDRESS"));
+			locationDTO.setPostal_code(rs.getString("POSTAL_CODE"));
+			locationDTO.setCity(rs.getString("CITY"));
+			locationDTO.setState_province(rs.getString("STATE_PROVINCE"));
+			locationDTO.setCountry_id(rs.getString("COUNTRY_ID"));
 		}
-		
 		DBConnection.disConnect(rs, st, connection);
-		
+		return locationDTO;
 	}
 	
-	public ArrayList<LocationDTO> getList() throws Exception {
-
+	public ArrayList<LocationDTO> getList() throws Exception{
 		ArrayList<LocationDTO> ar = new ArrayList<LocationDTO>();
+		Connection connection = DBConnection.getConnection();
+
+		//3. 0uery문 생성
+		String sql = "SELECT * FROM LOCATIONS";
 		
-		Connection connection = DBConnection.getConnection();		
-		
-		//3. Query문 생성
-		String sql ="SELECT * FROM LOCATIONS";
-		
-		//4. Query문 미리 전송
+		//4. 0uery문 미리 전송
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		//5. ? 세팅
-		
+				
 		//6. 최종 전송 및 결과 처리
-		ResultSet rs = st.executeQuery();
+		ResultSet rs = st.executeQuery();		
 		
 		while(rs.next()) {
 			LocationDTO locationDTO = new LocationDTO();
@@ -138,7 +127,6 @@ public class LocationDAO {
 		//7. 연결 해제
 		DBConnection.disConnect(rs, st, connection);
 		return ar;
-		
 	}
 }
 	
