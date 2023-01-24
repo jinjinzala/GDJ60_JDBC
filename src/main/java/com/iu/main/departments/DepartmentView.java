@@ -3,26 +3,20 @@ package com.iu.main.departments;
 import java.util.ArrayList;
 
 public class DepartmentView {
-  //view 
-	
-	public void view(String msg) {
-		System.out.print(msg);
-	}
-	
-	public void view(DepartmentDTO departmentDTO) {
-		System.out.println(departmentDTO.getDepartment_id());
-		System.out.println(departmentDTO.getLocation_id());
-		System.out.println(departmentDTO.getManager_id());
-		System.out.println(departmentDTO.getLocation_id());
-	}
-
 	public void view(ArrayList<DepartmentDTO> ar) {
-		for(DepartmentDTO departmentDTO : ar) {
-			this.view(departmentDTO);
+		for(DepartmentDTO dto:ar) {
+			this.view(dto);
 		}
 	}
+	public void view(DepartmentDTO dto) {
+		
+		System.out.println("부서번호: "+dto.getDepartment_id());
+		System.out.println("부서이름: "+dto.getDepartment_name());
+		System.out.println("관리자번호: "+dto.getManager_id());
+		System.out.println("지역번호: "+dto.getLocation_id());
+	}
 	
-	
-  	
-  	
+	public void view(String msg) {
+		System.out.println(msg);
+	}
 }
