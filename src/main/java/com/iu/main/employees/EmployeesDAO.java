@@ -14,37 +14,32 @@ import oracle.jdbc.proxy.annotation.Pre;
 public class EmployeesDAO {
 	
 	
-   //월급의 평균
+   //월급의 평균 getAvg()
 	public HashMap<String, Double> getAvg() throws Exception{
 		HashMap<String, Double> map = new HashMap<String, Double>();
-		
-
 		Connection con = DBConnection.getConnection();
-		
 		String sql = "SELECT AVG(SALARY)*12+100 AS A, SUM(SALARY) FROM EMPLOYEES";
-		
 		PreparedStatement st = con.prepareStatement(sql);
-		
 		ResultSet rs = st.executeQuery();
-	    
 		rs.next();
-		
-
 		//1. List,Array<Double>
 		//2. DTO(Class)
 		//3. Map(key,value)
-		
 		map.put("avg",rs.getDouble("A") );
-		map.put("sum",rs.getDouble(2));
-		
+		map.put("sum",rs.getDouble(2));		
 		DBConnection.disConnect(rs, st, con);
 		return map;
-	
-	
 	}
 
+	
+	
+	
+	
+	
+	
+	
+//2번 개별 사원리스트 출력 	getDetail
 	public EmployeesDTO getDetail(int employees_id) throws Exception{
-		
 	EmployeesDTO employeesDTO = new EmployeesDTO();	
 	//DB연결 
 	Connection connection = DBConnection.getConnection();
@@ -76,7 +71,11 @@ public class EmployeesDAO {
 	return employeesDTO;
 	}
 	
-	//2번 문제 
+	
+	
+	
+	
+	//1번 사원 전체리스트 출력
 	public ArrayList<EmployeesDTO> getList() throws Exception{
 	ArrayList<EmployeesDTO> ar =  new ArrayList<EmployeesDTO>();
 	Connection connection = DBConnection.getConnection();	
@@ -102,7 +101,6 @@ public class EmployeesDAO {
 	   //꺼낸데이터를 리턴 
 	   return ar;
 	}
-	   
 	   // 이름으로 
 	   public ArrayList<EmployeesDTO> getname(String search) throws Exception{
 		  ArrayList<EmployeesDTO> ar =  new ArrayList<EmployeesDTO>();
@@ -117,14 +115,16 @@ public class EmployeesDAO {
 		//6. 최종 전송 및 결과 처리 
 		ResultSet rs = st.executeQuery();
 			
-		//4개가 모여서 DTO하나가 된다 next 호출 필수 
+		//next 호출 필수 
 		while(rs.next()) {
 		EmployeesDTO employeesDTO = new EmployeesDTO();
 		employeesDTO.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
 		employeesDTO.setFirst_name(rs.getString("FIRST_NAME"));
 		employeesDTO.setLast_name(rs.getString("LAST_NAME"));
-		employeesDTO.setJob_id(rs.getString("JOB_ID"));
+		employeesDTO.setEamil(rs.getString("EMAIL"));
+		employeesDTO.setPhone_number(rs.getString("PHONE_NUMBER"));
 		employeesDTO.setHire_date(rs.getString("HIRE_DATE"));
+		employeesDTO.setJob_id(rs.getString("JOB_ID"));
 		ar.add(employeesDTO);
 	    }
 		DBConnection.disConnect(rs, st, connection);
